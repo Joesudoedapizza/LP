@@ -76,10 +76,10 @@
         
     }
     
-    function InsertInDatabase($finame, $laname, $email, $address, $zipcode, $city, $phone){
+    function InsertInDatabase($fname, $lname, $email, $address, $zipcode, $city, $phone){
     global $mysqli;
-    $query = "INSERT INTO `members` (`finame`, `laname`, `email`, `address`, `zipcode`, `city`, `phone`) 
-              VALUES ('$finame', '$laname', '$email', '$address', '$zipcode', '$city', '$phone')";
+    $query = "INSERT INTO `members` (`fname`, `lname`, `email`, `address`, `zipcode`, `city`, `phone`) 
+              VALUES ('$fname', '$lname', '$email', '$address', '$zipcode', '$city', '$phone')";
     $result = mysqli_query($mysqli, $query);
     if($result){
         header('location:?');
@@ -87,23 +87,23 @@
     }
 }
     
-    public function get_finame($uid){
-        $query = "SELECT finame FROM members WHERE uid = $uid";
+    public function get_fname($uid){
+        $query = "SELECT fname FROM members WHERE uid = $uid";
         
         $result = $this->db->query($query) or die($this->db->error);
         
         $user_data = $result->fetch_array(MYSQLI_ASSOC);
-        echo $user_data['finame'];
+        echo $user_data['fname'];
         
     }
     
-    public function get_laname($uid){
-        $query = "SELECT laname FROM members WHERE uid = $uid";
+    public function get_lname($uid){
+        $query = "SELECT lname FROM members WHERE uid = $uid";
         
         $result = $this->db->query($query) or die($this->db->error);
         
         $user_data = $result->fetch_array(MYSQLI_ASSOC);
-        echo $user_data['laname'];
+        echo $user_data['lname'];
         
     }
     
@@ -158,41 +158,9 @@
     }
     
     // -------------------------------------- PROFILE INFORMATION ENDS --------------------------- //
-    
-    public function get_fname($uid){
-        $query = "SELECT fname FROM users WHERE uid = $uid";
-        
-        $result = $this->db->query($query) or die($this->db->error);
-        
-        $user_data = $result->fetch_array(MYSQLI_ASSOC);
-        echo $user_data['fname'];
-        
-    }
-    
-    public function get_lname($uid){
-        $query = "SELECT lname FROM users WHERE uid = $uid";
-        
-        $result = $this->db->query($query) or die($this->db->error);
-        
-        $user_data = $result->fetch_array(MYSQLI_ASSOC);
-        echo $user_data['lname'];
-        
-    }
-    
-    public function get_uemail($uid){
-        $query = "SELECT uemail FROM users WHERE uid = $uid";
-        
-        $result = $this->db->query($query) or die($this->db->error);
-        
-        $user_data = $result->fetch_array(MYSQLI_ASSOC);
-        echo $user_data['uemail'];
-        
-    }
-    function fetch_role($uid)
-    {
-       
-        if(isset($_SESSION['role_id']))
-        {
+
+    function fetch_role($uid) { 
+        if(isset($_SESSION['role_id'])) {
         // User exists
             $query = "SELECT role_name FROM roles 
             INNER JOIN users ON fk_role_id = role_id
@@ -214,28 +182,28 @@
     /*** starting the session ***/
     public function get_session(){
         return $_SESSION['login'];
-        }
+    }
     public function user_logout() {
         $_SESSION['login'] = FALSE;
         unset($_SESSION);
         session_destroy();
-        }
+    }
     
 }
 
 if (isset($_POST['Submit'])) {
-        $fname  = mysqli_real_escape_string($mysqli, $_POST["fname"]);
-        $lname  = mysqli_real_escape_string($mysqli, $_POST["lname"]);
-        $email   = mysqli_real_escape_string($mysqli, $_POST["email"]);
-        $address = mysqli_real_escape_string($mysqli, $_POST["address"]);
-        $zipcode = mysqli_real_escape_string($mysqli, $_POST["zipcode"]);
-        $city    = mysqli_real_escape_string($mysqli, $_POST["city"]);
-        $phone   = mysqli_real_escape_string($mysqli, $_POST["phone"]);
+    $fname  = mysqli_real_escape_string($mysqli, $_POST["fname"]);
+    $lname  = mysqli_real_escape_string($mysqli, $_POST["lname"]);
+    $email   = mysqli_real_escape_string($mysqli, $_POST["email"]);
+    $address = mysqli_real_escape_string($mysqli, $_POST["address"]);
+    $zipcode = mysqli_real_escape_string($mysqli, $_POST["zipcode"]);
+    $city    = mysqli_real_escape_string($mysqli, $_POST["city"]);
+    $phone   = mysqli_real_escape_string($mysqli, $_POST["phone"]);
 
-        require_once 'Member.php';
-        $user = new User;
-        $member = new Member($mysqli, $user);
-        $member->upsert($fname, $lname, $email, $address, $zipcode, $city, $phone, $_SESSION['uid']);
+    require_once 'Member.php';
+    $user = new User;
+    $member = new Member($mysqli, $user);
+    $member->upsert($fname, $lname, $email, $address, $zipcode, $city, $phone, $_SESSION['uid']);
 
-        echo '<script>alert(\'Your Informations have been updated\')</script>';
-    }
+    echo '<script>alert(\'Your Informations have been updated\')</script>';
+}
